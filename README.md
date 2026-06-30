@@ -426,6 +426,46 @@ sns.countplot(data['Property_Area'], hue=data['Loan_Amount_Term'])
 
 ---
 
+## Multivariate Analysis
+
+Multivariate analysis examines the **relationships between multiple features simultaneously**, revealing how combined variables interact to influence the target outcome. This project uses the **`swarmplot`** function from the Seaborn library.
+
+---
+
+### 🐝 Swarmplot — Gender, Income & Loan Status
+
+The swarmplot visualises **three variables at once**:
+- **X-axis**: `Gender` (categorical)
+- **Y-axis**: `ApplicantIncome` (continuous)
+- **Hue**: `Loan_Status` (target — Y / N)
+
+```python
+# visualized based on gender and income what would be the application status
+sns.swarmplot(data['Gender'], data['ApplicantIncome'], hue=data['Loan_Status'])
+```
+
+---
+
+### 🔍 Multivariate Insights
+
+| Dimension | Variable | Role |
+|---|---|---|
+| X-Axis | `Gender` | Groups data points by applicant gender (Male / Female) |
+| Y-Axis | `ApplicantIncome` | Shows the income distribution within each gender group |
+| Hue (Color) | `Loan_Status` | Distinguishes approved (`Y`) vs rejected (`N`) applications |
+
+---
+
+### 📌 Key Observations
+
+- **High-income applicants** (both male and female) are more likely to receive loan approval — `Loan_Status = Y` dots appear more frequently at higher income levels.
+- **Male applicants** show a **wider income spread** compared to female applicants, reflecting income disparity in the dataset.
+- **Female applicants** at lower income levels still receive approvals, indicating that **income alone is not the sole deciding factor** — credit history and other variables also play a role.
+- The swarmplot makes it easy to identify **outliers** in income that may affect model training, especially for high-earning applicants with rejected loans.
+- This three-dimensional view bridges the gap between individual feature analysis (univariate) and the full multivariate model, providing a clearer picture of the **combined influence of gender and income on loan decisions**.
+
+---
+
 ## Setup & Running
 
 
