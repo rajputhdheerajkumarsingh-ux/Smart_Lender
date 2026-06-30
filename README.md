@@ -656,6 +656,43 @@ x_bal = pd.DataFrame(x_bal, columns=names)
 
 ---
 
+## Train-Test Split
+
+To evaluate the predictive performance of the machine learning models, the dataset is split into a **training set** (used to train the model) and a **testing set** (used to evaluate performance on unseen data).
+
+---
+
+### ✂️ Split Strategy & Parameters
+
+The `train_test_split()` function from `scikit-learn` is used to split the balanced, scaled features (`x_bal`) and the balanced target variable (`y_bal`) using the following parameters:
+
+- **Features (X)**: Input features containing demographic, financial, and credit history variables.
+- **Target (y)**: Binary loan approval status (`0` or `1`).
+- **`test_size=0.33`**: Allocates **33%** of the dataset for testing (~279 samples) and **67%** for training (~565 samples).
+- **`random_state=42`**: Sets a seed value to ensure the random split is identical every time the notebook is run, ensuring reproducibility of the model results.
+
+```python
+# splitting the dataset in train and test on balanced dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    x_bal, y_bal, test_size=0.33, random_state=42
+)
+
+# Inspect dataset shapes
+X_train.shape
+X_test.shape
+```
+
+---
+
+### 📊 Dataset Partitions
+
+| Partition | Description | Percentage | Sample Count | Shape |
+|---|---|---|---|---|
+| **Training Set (`X_train`, `y_train`)** | Used to fit model parameters | 67% | ~565 | `(565, 12)` |
+| **Testing Set (`X_test`, `y_test`)** | Used to test model generalization | 33% | ~279 | `(279, 12)` |
+
+---
+
 ## Setup & Running
 
 
