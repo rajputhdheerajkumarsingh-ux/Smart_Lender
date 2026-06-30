@@ -23,6 +23,42 @@ The project was developed using a set of powerful Python-based tools and librari
 | **Seaborn** | High-level statistical data visualization built on top of Matplotlib | [seaborn.pydata.org](https://seaborn.pydata.org/) |
 | **Flask** | Lightweight WSGI web framework for building APIs and deploying ML models | [flask.palletsprojects.com](https://flask.palletsprojects.com/) |
 
+## Dataset
+
+There are many popular open-source repositories for collecting data, with **Kaggle** and the **UCI Machine Learning Repository** being among the most widely used platforms in the data science community.
+
+For this project, the **Loan Prediction Dataset** is sourced from **Google Sheets** and contains applicant information such as gender, marital status, education, income, loan amount, credit history, and loan approval status.
+
+### 📥 Download the Dataset
+
+| Source | Link |
+|---|---|
+| **Google Drive (Project Dataset)** | [Click here to download](https://drive.google.com/drive/folders/1fOen6--02V7Ka6E24R8lPAAZ8V0vnENI?usp=sharing) |
+| **Kaggle** | [kaggle.com/datasets](https://www.kaggle.com/datasets) |
+| **UCI Machine Learning Repository** | [archive.ics.uci.edu](https://archive.ics.uci.edu/ml/index.php) |
+
+> **Instructions:** Download the dataset CSV file from the Google Drive link above and place it inside the `data/` directory of the project before running any scripts.
+
+### 📋 Dataset Features
+
+| Feature | Description |
+|---|---|
+| `Loan_ID` | Unique identifier for each loan application |
+| `Gender` | Applicant's gender (Male / Female) |
+| `Married` | Marital status of the applicant |
+| `Dependents` | Number of dependents |
+| `Education` | Applicant's education level (Graduate / Not Graduate) |
+| `Self_Employed` | Whether the applicant is self-employed |
+| `ApplicantIncome` | Monthly income of the applicant |
+| `CoapplicantIncome` | Monthly income of the co-applicant |
+| `LoanAmount` | Requested loan amount (in thousands) |
+| `Loan_Amount_Term` | Loan repayment term (in months) |
+| `Credit_History` | Credit history meets guidelines (1 = Yes, 0 = No) |
+| `Property_Area` | Location of property (Urban / Semiurban / Rural) |
+| `Loan_Status` | Target variable — loan approved (Y / N) |
+
+---
+
 ## Project Workflow
 
 The project is developed through a structured workflow consisting of multiple epics, covering data collection, analysis, preprocessing, model development, and deployment. Each epic focuses on a specific stage of the machine learning lifecycle to ensure systematic and efficient project execution.
