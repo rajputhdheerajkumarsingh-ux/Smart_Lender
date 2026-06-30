@@ -726,6 +726,34 @@ def decisionTree(X_train, X_test, y_train, y_test):
 decisionTree(X_train, X_test, y_train, y_test)
 ```
 
+### 🌲 2. Random Forest Classifier
+
+An ensemble-based Random Forest model is built to improve predictive performance. A function named `RandomForest()` is defined with the same structure as `decisionTree()`.
+
+- **Model Setup**: Initializes `RandomForestClassifier` (an ensemble of decision trees) to reduce overfitting and variance.
+- **Training**: Trains on the training dataset (`X_train`, `y_train`).
+- **Evaluation**: Computes training and testing accuracies, and evaluates predictions via the confusion matrix and classification report.
+
+```python
+# importing and building the random forest model
+def RandomForest(X_tarin, X_test, y_train, y_test):
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
+    
+    # Predict and evaluate on training set
+    y_tr = model.predict(X_train)
+    print("Training Accuracy:", accuracy_score(y_tr, y_train))
+    
+    # Predict and evaluate on testing set
+    yPred = model.predict(X_test)
+    print("Testing Accuracy:", accuracy_score(yPred, y_test))
+
+# printing the train accuracy and test accuracy respectively
+RandomForest(X_train, X_test, y_train, y_test)
+```
+
+> 📝 **Note**: The parameter signature in the notebook screenshot includes a minor typo `X_tarin` but references the correct `X_train` variable within the scope.
+
 ---
 
 ## Setup & Running
