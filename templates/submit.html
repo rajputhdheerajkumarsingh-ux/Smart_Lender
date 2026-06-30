@@ -273,7 +273,8 @@
             -->
 
             <!-- APPROVED STATE (shown when prediction == "Approved") -->
-            <div id="result-approved" style="display: none;">
+            {% if prediction == "Approved" %}
+            <div id="result-approved">
                 <div class="status-badge approved">
                     <i class="fa-solid fa-circle-check"></i> Loan Approved
                 </div>
@@ -290,9 +291,9 @@
                     our <strong>XGBoost ML model</strong> predicts that the loan application is <strong>likely to be approved</strong>.
                 </p>
             </div>
-
+            {% else %}
             <!-- REJECTED STATE (shown when prediction == "Rejected") -->
-            <div id="result-rejected" style="display: none;">
+            <div id="result-rejected">
                 <div class="status-badge rejected">
                     <i class="fa-solid fa-triangle-exclamation"></i> Loan Rejected
                 </div>
@@ -310,17 +311,7 @@
                     Consider improving credit history or adjusting the loan amount.
                 </p>
             </div>
-
-            <!-- DEFAULT / TEMPLATE VARIABLE STATE -->
-            <!-- 
-                When integrating with Flask, replace the <script> block below with Jinja2 logic:
-                
-                {% if prediction == "Approved" %}
-                    Show #result-approved, hide #result-rejected
-                {% else %}
-                    Show #result-rejected, hide #result-approved
-                {% endif %}
-            -->
+            {% endif %}
 
             <div class="action-buttons">
                 <a href="/predict" class="btn btn-primary"><i class="fa-solid fa-rotate-left"></i> Predict Again</a>
@@ -332,32 +323,5 @@
     <footer class="footer">
         &copy; 2026 Smart Lender &mdash; Loan Approval Prediction System. All rights reserved.
     </footer>
-
-    <script>
-        // Demonstration Script:
-        // This reads the URL query parameter "result" to dynamically show the correct state.
-        // When integrating with Flask, replace this with Jinja2 template variables.
-        //
-        // Flask integration example in your route:
-        //   return render_template('submit.html', prediction="Approved")
-        //
-        // Then in the HTML, replace the script with:
-        //   {% if prediction == "Approved" %}
-        //     document.getElementById('result-approved').style.display = 'block';
-        //   {% else %}
-        //     document.getElementById('result-rejected').style.display = 'block';
-        //   {% endif %}
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const params = new URLSearchParams(window.location.search);
-            const result = params.get("result") || "Approved";
-
-            if (result === "Approved") {
-                document.getElementById("result-approved").style.display = "block";
-            } else {
-                document.getElementById("result-rejected").style.display = "block";
-            }
-        });
-    </script>
 </body>
 </html>
