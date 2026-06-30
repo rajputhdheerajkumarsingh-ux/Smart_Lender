@@ -626,6 +626,36 @@ names = x_bal.columns
 
 ---
 
+## Feature Scaling
+
+Feature scaling is an important preprocessing step because features measured on different scales (e.g., income in thousands vs. dependents in single digits) can mislead the model's predictions.
+
+---
+
+### 📏 Why Feature Scaling is Important
+
+- **Distance-Based Models**: Algorithms like **K-Nearest Neighbors (KNN)** and **Support Vector Machines (SVM)** rely on distance calculations between data points. Features with larger numeric ranges would dominate the distance calculation if not scaled.
+- **Optimization Algorithms**: Models using gradient descent optimization (like Logistic Regression or Neural Networks) converge much faster when features are scaled to a similar range.
+- **Target Exclusion**: Scaling is applied **only to the input features (X)**, not to the target/output variable (y).
+
+---
+
+### 💻 Code Implementation
+
+The project uses `StandardScaler` from Scikit-Learn, which standardizes features by removing the mean and scaling to unit variance ($z = (x - \mu) / \sigma$). After fitting and transforming, the resulting NumPy array is converted back into a Pandas DataFrame.
+
+```python
+# performing feature Scaling operation using standard scaler on X part of the dataset because
+# there different type of values in the columns
+sc = StandardScaler()
+x_bal = sc.fit_transform(x_bal)
+
+# Converting the scaled array back to a DataFrame with original column names
+x_bal = pd.DataFrame(x_bal, columns=names)
+```
+
+---
+
 ## Setup & Running
 
 
