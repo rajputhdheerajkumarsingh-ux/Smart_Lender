@@ -382,6 +382,50 @@ plt.show()
 
 ---
 
+## Bivariate Analysis
+
+Bivariate analysis uses **count plots** to examine relationships between **pairs of variables**, revealing how one feature interacts with or influences another.
+
+---
+
+### 📊 Countplot — Visualising Two Columns Against Each Other
+
+Three subplot pairs are plotted side by side to compare key feature combinations across the dataset.
+
+```python
+# visualising two columns against each other
+plt.figure(figsize=(20, 5))
+
+plt.subplot(131)
+sns.countplot(data['Married'], hue=data['Gender'])
+
+plt.subplot(132)
+sns.countplot(data['Self_Employed'], hue=data['Education'])
+
+plt.subplot(133)
+sns.countplot(data['Property_Area'], hue=data['Loan_Amount_Term'])
+```
+
+---
+
+### 🔍 Bivariate Insights
+
+| Plot | X-Axis | Hue (Grouping) | Key Insight |
+|---|---|---|---|
+| **Subplot 1** | `Married` | `Gender` | Segmenting **gender against married status** reveals demographic patterns in loan applications — married males dominate applicants |
+| **Subplot 2** | `Self_Employed` | `Education` | Segmenting **education against self-employment** shows that **educated applicants tend to be employed** — non-graduates are more likely to be self-employed |
+| **Subplot 3** | `Property_Area` | `Loan_Amount_Term` | **Loan amount term distributions vary** based on the applicant's property area — Semiurban areas show a wider spread of loan terms |
+
+---
+
+### 📌 Summary of Observations
+
+- **Gender × Married**: Married male applicants form the largest segment, indicating a strong demographic skew in the application pool.
+- **Education × Self-Employed**: Graduate applicants are less likely to be self-employed, suggesting a correlation between formal education and salaried employment.
+- **Property Area × Loan Amount Term**: The 360-month (30-year) term is the most common across all property areas, with Urban areas showing slightly more variation in term length.
+
+---
+
 ## Setup & Running
 
 
