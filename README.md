@@ -754,6 +754,32 @@ RandomForest(X_train, X_test, y_train, y_test)
 
 > 📝 **Note**: The parameter signature in the notebook screenshot includes a minor typo `X_tarin` but references the correct `X_train` variable within the scope.
 
+### 👥 3. K-Nearest Neighbors (KNN) Classifier
+
+A distance-based K-Nearest Neighbors classifier is built. A function named `KNN()` is defined using the same standard structure.
+
+- **Model Setup**: Initializes `KNeighborsClassifier` with default parameters. Note that since KNN relies on Euclidean distance calculations, this model relies heavily on the **Feature Scaling** preprocessing step completed earlier.
+- **Training**: Fits the model on the standardized training data (`X_train`, `y_train`).
+- **Evaluation**: Computes accuracy scores and evaluates classification metrics using confusion matrices and classification reports.
+
+```python
+# importing and building the KNN model
+def KNN(X_train, X_test, y_train, y_test):
+    model = KNeighborsClassifier()
+    model.fit(X_train, y_train)
+    
+    # Predict and evaluate on training set
+    y_tr = model.predict(X_train)
+    print("Training Accuracy:", accuracy_score(y_tr, y_train))
+    
+    # Predict and evaluate on testing set
+    yPred = model.predict(X_test)
+    print("Testing Accuracy:", accuracy_score(yPred, y_test))
+
+# printing the train accuracy and test accuracy respectively
+KNN(X_train, X_test, y_train, y_test)
+```
+
 ---
 
 ## Setup & Running
