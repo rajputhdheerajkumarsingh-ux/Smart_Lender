@@ -693,6 +693,41 @@ X_test.shape
 
 ---
 
+## Model Building
+
+To predict loan eligibility, several machine learning classifiers are trained, evaluated, and compared. 
+
+---
+
+### 🌳 1. Decision Tree Classifier
+
+A Decision Tree model is built to establish a baseline classification performance. A function named `decisionTree()` is defined to streamline initialization, training, and evaluation.
+
+- **Model Setup**: Initializes `DecisionTreeClassifier` with default hyperparameters.
+- **Training**: Fits the model on the balanced training data (`X_train`, `y_train`).
+- **Prediction**: Predicts labels for both the training and testing datasets to inspect overfitting/generalization.
+- **Evaluation**: The accuracy score is printed, and model performance is further evaluated using a confusion matrix and a classification report.
+
+```python
+# importing and building the Decision tree model
+def decisionTree(X_train, X_test, y_train, y_test):
+    model = DecisionTreeClassifier()
+    model.fit(X_train, y_train)
+    
+    # Predict and evaluate on training set
+    y_tr = model.predict(X_train)
+    print("Training Accuracy:", accuracy_score(y_tr, y_train))
+    
+    # Predict and evaluate on testing set
+    yPred = model.predict(X_test)
+    print("Testing Accuracy:", accuracy_score(yPred, y_test))
+
+# printing the train accuracy and test accuracy respectively
+decisionTree(X_train, X_test, y_train, y_test)
+```
+
+---
+
 ## Setup & Running
 
 
