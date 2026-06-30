@@ -558,6 +558,74 @@ data.info()
 
 ---
 
+## Data Balancing — SMOTE
+
+Data balancing is a critical step for classification models. Training on an **imbalanced dataset** leads to biased predictions, where the model predominantly predicts the **majority class** and ignores the minority class.
+
+---
+
+### ⚖️ Why Balancing is Needed
+
+In the loan prediction dataset, loan approvals (`Loan_Status = 1`) significantly outnumber rejections (`Loan_Status = 0`), creating a class imbalance that biases the model towards always predicting approval.
+
+```
+Before Balancing:
+  Loan_Status = 1 (Approved)  →  ~422 samples  (majority)
+  Loan_Status = 0 (Rejected)  →  ~190 samples  (minority)
+```
+
+---
+
+### 🧬 SMOTE — Synthetic Minority Over-sampling Technique
+
+This project applies **SMOTE** from the `imblearn` library to address class imbalance. SMOTE generates **synthetic data points** for the minority class using the **K-Nearest Neighbors (KNN)** method — it does not simply duplicate existing samples but creates new, realistic in-between points.
+
+```python
+from imblearn.over_sampling import SMOTE
+
+# Separate features and target
+x = data.drop('Loan_Status', axis=1)
+y = data['Loan_Status']
+
+# Apply SMOTE to generate synthetic minority class samples
+smote = SMOTE()
+
+# creating a new x and y variables for the balanced set
+x_bal, y_bal = smote.fit_resample(x, y)
+
+# printing the values of y before balancing the data and after
+print(y.value_counts())
+print(y_bal.value_counts())
+
+names = x_bal.columns
+```
+
+---
+
+### 📊 Before vs After Balancing
+
+| Class | Label | Before SMOTE | After SMOTE |
+|---|---|---|---|
+| Approved | `1` | ~422 samples | ~422 samples |
+| Rejected | `0` | ~190 samples | ~422 samples ✅ |
+| **Total** | | **~612** | **~844** |
+
+> After applying SMOTE, the **minority class size is increased to match the majority class**, resulting in a **balanced dataset** that enables unbiased model training.
+
+---
+
+### 🔑 How SMOTE Works
+
+```
+1. For each minority class sample:
+   └── Find its K nearest neighbours (also minority class)
+   └── Randomly select one neighbour
+   └── Generate a synthetic point along the line between them
+2. Repeat until minority class matches majority class size
+```
+
+---
+
 ## Setup & Running
 
 
