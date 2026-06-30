@@ -128,20 +128,118 @@ The project is developed through a structured workflow consisting of multiple ep
 
 ---
 
-## Project Structure
-- `app/`
-  - `main.py`: FastAPI server configuration, routing, and database initialization.
-  - `database.py`: SQLAlchemy session and SQLite connection configurations.
-  - `models.py`: Database models mapping the ER diagram.
-  - `schemas.py`: Pydantic request/response models.
-  - `crud.py`: Database queries and creation transactions.
-  - `ml.py`: Loads the model binary and evaluates applications.
-  - `static/`: Premium Glassmorphism web dashboard.
-- `scripts/`
-  - `train_model.py`: Generates synthetic data, trains the XGBoost Classifier, and registers it in the SQLite DB.
-- `requirements.txt`: Python package specifications.
+## Application Architecture
+
+After data collection, a modular and scalable application architecture was designed to ensure **separation of concerns**, **maintainability**, and **future extensibility**. The system follows a **three-tier architecture**, consisting of the user interface, backend API layer, and AI/ML service modules.
+
+A well-structured directory hierarchy was adopted to separate frontend, backend, model, and testing components, improving code organization, development efficiency, and scalability.
+
+---
+
+### 🏛️ Three-Tier Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     TIER 1 — USER INTERFACE                 │
+│           HTML · CSS · JavaScript (Glassmorphism UI)        │
+│         static/index.html · static/styles.css · app.js      │
+└────────────────────────────┬────────────────────────────────┘
+                             │  HTTP Requests / REST API
+┌────────────────────────────▼────────────────────────────────┐
+│                  TIER 2 — BACKEND API LAYER                 │
+│              FastAPI / Flask · SQLAlchemy · SQLite          │
+│          main.py · crud.py · models.py · schemas.py         │
+└────────────────────────────┬────────────────────────────────┘
+                             │  Model Inference Calls
+┌────────────────────────────▼────────────────────────────────┐
+│                 TIER 3 — AI / ML SERVICE MODULE             │
+│     XGBoost · Scikit-learn · Pandas · NumPy · Pickle       │
+│        ml.py · xgboost_loan_model.pkl · train_model.py     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 🔄 Data Flow Diagram
+
+```
+User fills Loan Form
+        │
+        ▼
+Frontend (HTML/JS) ──► POST /predict ──► FastAPI Backend
+                                                │
+                                                ▼
+                                     Load Applicant Data
+                                                │
+                                                ▼
+                                    ML Pipeline (ml.py)
+                                    ┌───────────────────┐
+                                    │ Feature Encoding  │
+                                    │ Scaling / Scaler  │
+                                    │ XGBoost Inference │
+                                    └────────┬──────────┘
+                                             │
+                                             ▼
+                              Prediction Result (Approved / Rejected)
+                                             │
+                                             ▼
+                                  Save to SQLite DB (Prediction Log)
+                                             │
+                                             ▼
+                              JSON Response ──► Frontend Dashboard
+```
+
+---
+
+### 📁 Project Directory Structure
+
+```
+SmartLender/
+│
+├── 📂 Dataset/                        # Raw data files
+│   ├── loan_prediction.csv            # Primary training dataset (CSV)
+│   ├── loan_prediction.xlsx           # Excel version of the dataset
+│   └── loan_prediction(1).csv        # Alternate / cleaned dataset copy
+│
+├── 📂 Flask/                          # Flask web application
+│   ├── 📂 static/                     # Static assets (CSS, JS, images)
+│   ├── 📂 templates/                  # HTML Jinja2 templates
+│   ├── app1.py                        # Main Flask application entry point
+│   ├── app1(1).py                     # Alternate / updated Flask app version
+│   ├── rdf.pkl                        # Serialized Random Forest model
+│   ├── scale1.pkl                     # Fitted feature scaler (StandardScaler)
+│   └── scale1(1).pkl                  # Alternate scaler version
+│
+├── 📂 IBM/                            # IBM Cloud deployment configurations
+│
+├── 📂 Training/                       # Model training notebooks
+│   └── Loan Prediction using ML.ipynb # Jupyter Notebook — full ML pipeline
+│
+├── 📂 app/                            # FastAPI backend (production server)
+│   ├── main.py                        # API routing & server initialization
+│   ├── database.py                    # SQLAlchemy & SQLite configuration
+│   ├── models.py                      # ORM database models
+│   ├── schemas.py                     # Pydantic request/response schemas
+│   ├── crud.py                        # Database CRUD operations
+│   ├── ml.py                          # ML model loader & inference engine
+│   ├── 📂 models/
+│   │   └── xgboost_loan_model.pkl     # Trained XGBoost pipeline (pickle)
+│   └── 📂 static/                     # Glassmorphism web dashboard
+│       ├── index.html
+│       ├── styles.css
+│       └── app.js
+│
+├── 📂 scripts/
+│   └── train_model.py                 # Model training & DB registration script
+│
+├── requirements.txt                   # Python dependencies
+└── README.md                          # Project documentation
+```
+
+---
 
 ## Setup & Running
+
 
 1. **Setup Python Virtual Environment**
    ```bash
