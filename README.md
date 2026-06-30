@@ -311,6 +311,77 @@ data
 
 ---
 
+## Univariate Analysis
+
+Univariate analysis is performed to examine the **distribution and characteristics of individual features** in the dataset, one variable at a time.
+
+---
+
+### 📈 Continuous Features — Distribution Plot (Distplot)
+
+Distribution plots (`distplot`) are used to visualize **continuous variables** and understand their data distribution. Subplots enable multiple feature visualizations within a single figure for easier comparison.
+
+```python
+# plotting the using distplot
+plt.figure(figsize=(12, 5))
+plt.subplot(121)
+sns.distplot(data['ApplicantIncome'], color='r')
+plt.subplot(122)
+sns.distplot(data['Credit_History'])
+plt.show()
+```
+
+> ⚠️ **Deprecation Note:** `distplot` is deprecated in Seaborn v0.14.0+.
+> Use `sns.displot()` (figure-level) or `sns.histplot()` (axes-level) as modern alternatives.
+
+| Feature | Plot Type | Observation |
+|---|---|---|
+| `ApplicantIncome` | Distplot (red) | Exhibits a **left-skewed distribution** — most applicants have lower income with a long right tail |
+| `Credit_History` | Distplot | **Binary feature** with values `0` and `1` only |
+
+---
+
+### 📊 Categorical Features — Count Plot (Countplot)
+
+Count plots (`countplot`) are used for **categorical variables** to display the frequency of each unique category. A dummy DataFrame is created with all categorical features and plotted using a `for` loop with subplots.
+
+```python
+# categorical features countplot using subplot
+cat_data = data[['Gender', 'Married', 'Dependents',
+                  'Education', 'Self_Employed',
+                  'Property_Area', 'Loan_Status']]
+
+fig, axes = plt.subplots(2, 4, figsize=(20, 10))
+for idx, col in enumerate(cat_data.columns):
+    ax = axes[idx // 4, idx % 4]
+    sns.countplot(x=col, data=cat_data, ax=ax)
+    ax.set_title(col)
+plt.tight_layout()
+plt.show()
+```
+
+| Feature | Categories | Observation |
+|---|---|---|
+| `Gender` | Male / Female | **2 categories** — frequency of Male (category 0) is higher |
+| `Education` | Graduate / Not Graduate | **2 categories** — Graduate (category 0) frequency is higher |
+| `Married` | Yes / No | Binary — majority are married |
+| `Dependents` | 0 / 1 / 2 / 3+ | Most applicants have 0 dependents |
+| `Self_Employed` | Yes / No | Most applicants are not self-employed |
+| `Property_Area` | Urban / Semiurban / Rural | Semiurban has the highest count |
+| `Loan_Status` | Y / N | Class imbalance visible — more approvals than rejections |
+
+---
+
+### 🔍 Key Observations
+
+- **ApplicantIncome** exhibits a **left-skewed distribution** — skewness needs to be addressed during preprocessing.
+- **Credit History** is a **binary feature** with values `0` and `1` — critical predictor for loan approval.
+- **Gender** and **Education** are **categorical variables with two categories each**.
+- The **frequency of category 0 is higher** than category 1 for both `Gender` and `Education` features.
+- This analysis helps identify **feature patterns and distributions** before proceeding with data preprocessing and model development.
+
+---
+
 ## Setup & Running
 
 
