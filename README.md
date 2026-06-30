@@ -780,6 +780,34 @@ def KNN(X_train, X_test, y_train, y_test):
 KNN(X_train, X_test, y_train, y_test)
 ```
 
+### ⚡ 4. Gradient Boosting (XGB) Classifier
+
+A Gradient Boosting classifier (referred to as XGB in the notebook) is built. A function named `XGB()` is created to train and test the model.
+
+- **Model Setup**: Initializes `GradientBoostingClassifier` from Scikit-Learn. This ensemble method builds trees sequentially, where each tree attempts to correct the errors of the previous tree.
+- **Training**: Fits the model on the balanced training data (`X_train`, `y_train`).
+- **Evaluation**: Computes accuracy scores and evaluates classifications using confusion matrices and classification reports.
+
+```python
+# importing and building the Xg boost model
+def XGB(X_train, X_test, y_train, y_test):
+    model = GradientBoostingClassifier()
+    model.fit(X_train, y_train)
+    
+    # Predict and evaluate on training set
+    y_tr = model.predict(X_train)
+    print("Training Accuracy:", accuracy_score(y_tr, y_train))
+    
+    # Predict and evaluate on testing set
+    yPred = model.predict(X_test)
+    print("Testing Accuracy:", accuracy_score(yPred, y_test))
+
+# printing the train accuracy and test accuracy respectively
+XGB(X_train, X_test, y_train, y_test)
+```
+
+> 📝 **Note**: Although the function and comments reference "Xg boost", the implementation initializes Scikit-Learn's `GradientBoostingClassifier`.
+
 ---
 
 ## Setup & Running
