@@ -466,6 +466,98 @@ sns.swarmplot(data['Gender'], data['ApplicantIncome'], hue=data['Loan_Status'])
 
 ---
 
+## Data Pre-Processing
+
+Before training machine learning models, the raw dataset undergoes a series of cleaning and transformation steps to ensure data quality and model compatibility.
+
+---
+
+### 🔡 Step 1 — Handling Categorical Values
+
+Categorical features are converted into numerical values using **label encoding (mapping)** so machine learning algorithms can process them correctly.
+
+```python
+import jupyterthemes as jt
+!jt -t onedork
+
+# Encode categorical features to numeric
+data['Gender']        = data['Gender'].map({'Female': 1, 'Male': 0})
+data['Property_Area'] = data['Property_Area'].map({'Urban': 2, 'Semiurban': 1, 'Rural': 0})
+data['Married']       = data['Married'].map({'Yes': 1, 'No': 0})
+data['Education']     = data['Education'].map({'Graduate': 1, 'Not Graduate': 0})
+data['Loan_Status']   = data['Loan_Status'].map({'Y': 1, 'N': 0})
+```
+
+**Encoding Mapping Reference:**
+
+| Feature | Encoding |
+|---|---|
+| `Gender` | Female → `1`, Male → `0` |
+| `Property_Area` | Urban → `2`, Semiurban → `1`, Rural → `0` |
+| `Married` | Yes → `1`, No → `0` |
+| `Education` | Graduate → `1`, Not Graduate → `0` |
+| `Loan_Status` | Y (Approved) → `1`, N (Rejected) → `0` |
+
+---
+
+### 🩹 Step 2 — Handling Missing Values
+
+The dataset is inspected for null values and missing entries are filled using appropriate strategies.
+
+```python
+# finding the sum of null values in each column
+data.isnull().sum()
+
+# Fill categorical columns with mode (most frequent value)
+data['Gender']        = data['Gender'].fillna(data['Gender'].mode()[0])
+data['Married']       = data['Married'].fillna(data['Married'].mode()[0])
+
+# replacing '+' with space for filling the NaN values in Dependents
+data['Dependents']    = data['Dependents'].str.replace('+', '')
+data['Dependents']    = data['Dependents'].fillna(data['Dependents'].mode()[0])
+
+data['Self_Employed'] = data['Self_Employed'].fillna(data['Self_Employed'].mode()[0])
+data['LoanAmount']    = data['LoanAmount'].fillna(data['LoanAmount'].mode()[0])
+```
+
+**Missing Value Strategy:**
+
+| Column | Strategy | Reason |
+|---|---|---|
+| `Gender` | Mode fill | Categorical — most frequent value preserves distribution |
+| `Married` | Mode fill | Categorical — binary feature |
+| `Dependents` | Mode fill + strip `+` | String `3+` cleaned before imputation |
+| `Self_Employed` | Mode fill | Categorical — binary feature |
+| `LoanAmount` | Mode fill | Numerical — mode used to avoid mean skew from outliers |
+
+---
+
+### 🔢 Step 3 — Data Inspection & Type Conversion
+
+After encoding and imputation, the dataset is verified and all float columns are cast to `int64` for consistency.
+
+```python
+# getting the total info of the data after performing categorical to numerical and replacing missing values
+data.info()
+data.isnull().sum()
+
+# changing the dtype of each float column to int
+data['Gender']             = data['Gender'].astype('int64')
+data['Married']            = data['Married'].astype('int64')
+data['Dependents']         = data['Dependents'].astype('int64')
+data['Self_Employed']      = data['Self_Employed'].astype('int64')
+data['CoapplicantIncome']  = data['CoapplicantIncome'].astype('int64')
+data['LoanAmount']         = data['LoanAmount'].astype('int64')
+data['Loan_Amount_Term']   = data['Loan_Amount_Term'].astype('int64')
+data['Credit_History']     = data['Credit_History'].astype('int64')
+
+data.info()
+```
+
+**Result:** All columns are now clean integer or numeric types — ready for model training with no missing values.
+
+---
+
 ## Setup & Running
 
 
