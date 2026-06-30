@@ -238,6 +238,79 @@ SmartLender/
 
 ---
 
+## Notebook — Library Imports & Data Loading
+
+All model training and exploratory data analysis is performed in the Jupyter Notebook:
+📓 `Training/Loan Prediction using ML.ipynb`
+
+---
+
+### 📦 Step 1 — Importing the Libraries
+
+The following libraries are imported at the start of the notebook. The visualization style **`fivethirtyeight`** is used for consistent and readable plots throughout the analysis.
+
+```python
+import pandas as pd
+import numpy as np
+import pickle
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+import sklearn
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import RandomizedSearchCV
+import imblearn
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score
+```
+
+| Library | Role |
+|---|---|
+| `pandas` | Load, explore, and manipulate the dataset |
+| `numpy` | Numerical operations and array handling |
+| `pickle` | Serialize and save trained model objects |
+| `matplotlib.pyplot` | Core plotting library (inline rendering via `%matplotlib inline`) |
+| `seaborn` | Statistical visualization with the `fivethirtyeight` style |
+| `sklearn` | ML algorithms, preprocessing, model selection, and evaluation metrics |
+| `DecisionTreeClassifier` | Decision Tree model training |
+| `GradientBoostingClassifier` | Gradient Boosting ensemble model |
+| `RandomForestClassifier` | Random Forest ensemble model |
+| `KNeighborsClassifier` | K-Nearest Neighbors classifier |
+| `RandomizedSearchCV` | Hyperparameter tuning via random search |
+| `imblearn` | Handling class imbalance (oversampling / undersampling) |
+| `train_test_split` | Splitting data into training and testing sets |
+| `StandardScaler` | Feature scaling and normalization |
+| `accuracy_score`, `f1_score`, etc. | Model evaluation metrics |
+
+---
+
+### 📂 Step 2 — Importing and Reading the Dataset
+
+The dataset is loaded from the CSV file using Pandas for further analysis.
+
+```python
+# importing the dataset which is in csv file
+data = pd.read_csv('/content/loan_prediction.csv')
+data
+```
+
+**Dataset Preview (first 5 rows of 612 total):**
+
+| | Loan_ID | Gender | Married | Dependents | Education | Self_Employed | ApplicantIncome | CoapplicantIncome | LoanAmount | Loan_Amount_Term | Credit_History | Property_Area | Loan_Status |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | LP001002 | Male | No | 0 | Graduate | No | 5849 | 0.0 | NaN | 360.0 | ... | ... | ... |
+| 1 | LP001003 | Male | Yes | 1 | Graduate | No | 4583 | 1508.0 | 128.0 | 360.0 | ... | ... | ... |
+| 2 | LP001005 | Male | Yes | 0 | Graduate | Yes | 3000 | 0.0 | 66.0 | 360.0 | ... | ... | ... |
+| 3 | LP001006 | Male | Yes | 0 | Not Graduate | No | 2583 | 2358.0 | 120.0 | 360.0 | ... | ... | ... |
+| 4 | LP001008 | Male | No | 0 | Graduate | No | 6000 | 0.0 | 141.0 | 360.0 | ... | ... | ... |
+
+> **Shape:** 612 rows × 13 columns — Each row represents one loan application with demographic, financial, and credit features.
+
+---
+
 ## Setup & Running
 
 
