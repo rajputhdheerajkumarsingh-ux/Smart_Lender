@@ -8,6 +8,21 @@ A full-stack machine learning application built with **FastAPI**, **SQLite + SQL
 - **Glassmorphism UI**: High-end dark theme dashboard with responsive form wizards, evaluation animations, interactive tables, and analytical charts.
 - **REST API Endpoints**: Full CRUD endpoints for applicant profile management, loan applications, and predictions.
 
+## Technologies Used
+
+The project was developed using a set of powerful Python-based tools and libraries for data processing, machine learning, visualization, and deployment.
+
+| Tool / Library | Purpose | Docs |
+|---|---|---|
+| **Anaconda Navigator** | Desktop GUI to manage Python packages and environments for data science | [anaconda.com](https://www.anaconda.com/download) |
+| **PyCharm** | Python IDE with code analysis, debugging, and refactoring tools | [jetbrains.com](https://www.jetbrains.com/pycharm/) |
+| **NumPy** | Core library for numerical computing with multi-dimensional array support | [numpy.org](https://numpy.org/doc/stable/) |
+| **Pandas** | Data manipulation and analysis with powerful DataFrame structures | [pandas.pydata.org](https://pandas.pydata.org/docs/) |
+| **Scikit-learn** | Machine learning library with classification, regression, and clustering algorithms | [scikit-learn.org](https://scikit-learn.org/stable/) |
+| **Matplotlib** | Comprehensive library for static, animated, and interactive visualizations | [matplotlib.org](https://matplotlib.org/stable/) |
+| **Seaborn** | High-level statistical data visualization built on top of Matplotlib | [seaborn.pydata.org](https://seaborn.pydata.org/) |
+| **Flask** | Lightweight WSGI web framework for building APIs and deploying ML models | [flask.palletsprojects.com](https://flask.palletsprojects.com/) |
+
 ## Project Structure
 - `app/`
   - `main.py`: FastAPI server configuration, routing, and database initialization.
