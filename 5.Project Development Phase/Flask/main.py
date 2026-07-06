@@ -1,7 +1,3 @@
-import sys
-# Clean path to prevent circular import conflicts on user's machine
-sys.path = [p for p in sys.path if not (p.endswith("Python313") or p.endswith("Python313\\"))]
-
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
