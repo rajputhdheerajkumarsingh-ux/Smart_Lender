@@ -115,10 +115,10 @@ python ../Training/train_model.py
 
 ### Run FastAPI Server (Full Stack Dashboard)
 ```bash
-uvicorn main:app --reload --port 8000
+uvicorn main:app --reload --port 5000
 ```
-Open: `http://127.0.0.1:8000/`
-API Docs: `http://127.0.0.1:8000/docs`
+Open: `http://127.0.0.1:5000/`
+API Docs: `http://127.0.0.1:5000/docs`
 
 ### Run Flask Server (Form-Based Interface)
 ```bash
