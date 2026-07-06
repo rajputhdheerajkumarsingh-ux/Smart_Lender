@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Lender | Loan Approval Prediction System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script href="https://cdn.jsdelivr.net/npm/chart.js" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+    <div class="glass-bg-glow"></div>
+    <div class="glass-bg-glow secondary"></div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-shield-halved brand-logo"></i>
+                <h2>Smart<span>Lender</span></h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="overview"><i class="fa-solid fa-chart-pie"></i> Overview & Analytics</a>
+                <a href="#" class="nav-item" data-target="applicants"><i class="fa-solid fa-user-plus"></i> Applicant Profiles</a>
+                <a href="#" class="nav-item" data-target="loans"><i class="fa-solid fa-file-invoice-dollar"></i> New Loan Request</a>
+                <a href="#" class="nav-item" data-target="prediction-center"><i class="fa-solid fa-brain"></i> Prediction Center</a>
+                <a href="#" class="nav-item" data-target="database"><i class="fa-solid fa-database"></i> System DB View</a>
+            </nav>
+            
+            <div class="model-status-card">
+                <div class="status-indicator">
+                    <span class="pulse-dot green" id="model-dot"></span>
+                    <span id="model-status-text">XGBoost Active</span>
+                </div>
+                <p>Model ID: <span id="active-model-id">1</span></p>
+                <div class="accuracy-metrics">
+                    <div>
+                        <span class="metric-label">Train Acc</span>
+                        <span class="metric-val" id="model-train-acc">--%</span>
+                    </div>
+                    <div>
+                        <span class="metric-label">Test Acc</span>
+                        <span class="metric-val" id="model-test-acc">--%</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-title">
+                    <h1>Loan Approval Decision Dashboard</h1>
+                    <p>Machine Learning Risk Assessment System</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-icon" id="btn-refresh-data" title="Sync Database">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <div class="user-badge">
+                        <div class="user-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="user-info">
+                            <span class="user-name">Credit Officer</span>
+                            <span class="user-role">Risk Management</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Cards Summary Row -->
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <div class="card-icon blue"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="card-data">
+                        <h3>Total Applications</h3>
+                        <p class="count" id="stat-total-apps">0</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="card-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="card-data">
+                        <h3>Approval Rate</h3>
+                        <p class="count" id="stat-approval-rate">0%</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="card-icon purple"><i class="fa-solid fa-user-tag"></i></div>
+                    <div class="card-data">
+                        <h3>Total Profiles</h3>
+                        <p class="count" id="stat-total-profiles">0</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="card-icon yellow"><i class="fa-solid fa-award"></i></div>
+                    <div class="card-data">
+                        <h3>Avg Credit Score</h3>
+                        <p class="count" id="stat-avg-credit">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panels Section -->
+            <div class="panels-container">
+                <!-- Overview Panel -->
+                <div class="panel active" id="panel-overview">
+                    <div class="grid-2-col">
+                        <!-- Chart Card -->
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-chart-bar"></i> Decisions Analytics</h3>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-decisions"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Mini Tables Card -->
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Decisions</h3>
+                            </div>
+                            <div class="table-container list-view">
+                                <table id="table-recent-predictions">
+                                    <thead>
+                                        <tr>
+                                            <th>App ID</th>
+                                            <th>Applicant ID</th>
+                                            <th>Status</th>
+                                            <th>Probability</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td colspan="5" class="text-center">No predictions run yet.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applicant Profiles Panel -->
+                <div class="panel" id="panel-applicants">
+                    <div class="grid-2-col">
+                        <!-- Create Applicant Profile -->
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-user-pen"></i> Create Applicant Profile</h3>
+                            </div>
+                            <form id="form-create-profile" class="dashboard-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="prof-user-id">Link User Account (Optional)</label>
+                                        <select id="prof-user-id" name="user_id">
+                                            <option value="">-- Choose User --</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="prof-gender">Gender</label>
+                                        <select id="prof-gender" name="gender" required>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="prof-married">Marital Status</label>
+                                        <select id="prof-married" name="married" required>
+                                            <option value="No">Single</option>
+                                            <option value="Yes">Married</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="prof-education">Education</label>
+                                        <select id="prof-education" name="education" required>
+                                            <option value="Graduate">Graduate</option>
+                                            <option value="Not Graduate">Not Graduate</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="prof-dependents">Dependents</label>
+                                        <select id="prof-dependents" name="dependents" required>
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3+</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="prof-self-employed">Self Employed</label>
+                                        <select id="prof-self-employed" name="self_employed" required>
+                                            <option value="No">No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="prof-property-area">Property Area</label>
+                                    <select id="prof-property-area" name="property_area" required>
+                                        <option value="Urban">Urban</option>
+                                        <option value="Semiurban">Semiurban</option>
+                                        <option value="Rural">Rural</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Create Profile</button>
+                            </form>
+                        </div>
+
+                        <!-- User & Credit History Side Panel -->
+                        <div class="flex-column-gap">
+                            <!-- Create User Card -->
+                            <div class="glass-card flex-grow-1">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-user-tie"></i> Register New User (Officer/Applicant)</h3>
+                                </div>
+                                <form id="form-create-user" class="dashboard-form">
+                                    <div class="form-group">
+                                        <label for="user-name">Full Name</label>
+                                        <input type="text" id="user-name" name="name" required placeholder="John Doe">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user-email">Email Address</label>
+                                        <input type="email" id="user-email" name="email" required placeholder="john@bank.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user-role">System Role</label>
+                                        <select id="user-role" name="role" required>
+                                            <option value="Credit Officer">Credit Officer</option>
+                                            <option value="Applicant">Applicant</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-secondary">Register User</button>
+                                </form>
+                            </div>
+                            
+                            <!-- Add Credit History Card -->
+                            <div class="glass-card flex-grow-1">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-credit-card"></i> Associate Credit History</h3>
+                                </div>
+                                <form id="form-add-credit" class="dashboard-form">
+                                    <div class="form-group">
+                                        <label for="credit-applicant-id">Select Applicant Profile</label>
+                                        <select id="credit-applicant-id" name="applicant_id" required>
+                                            <option value="">-- Select Profile --</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="credit-score">Credit (CIBIL) Score</label>
+                                            <input type="number" id="credit-score" name="credit_score" min="300" max="900" required placeholder="750">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="credit-history-status">Credit Status Guidelines</label>
+                                            <select id="credit-history-status" name="credit_history_status" required>
+                                                <option value="1">Met Guidelines (Excellent/Fair)</option>
+                                                <option value="0">Did Not Meet Guidelines (Poor/Defaulter)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-secondary">Save Credit Record</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loan Request Panel -->
+                <div class="panel" id="panel-loans">
+                    <div class="glass-card max-width-800 center-block">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-hand-holding-dollar"></i> Submit New Loan Application</h3>
+                        </div>
+                        <form id="form-create-loan" class="dashboard-form">
+                            <div class="form-group">
+                                <label for="loan-applicant-id">Select Applicant Profile</label>
+                                <select id="loan-applicant-id" name="applicant_id" required>
+                                    <option value="">-- Choose Applicant Profile --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="loan-income">Applicant Monthly Income ($)</label>
+                                    <input type="number" id="loan-income" name="income" required placeholder="5400">
+                                </div>
+                                <div class="form-group">
+                                    <label for="loan-coapplicant-income">Coapplicant Monthly Income ($)</label>
+                                    <input type="number" id="loan-coapplicant-income" name="coapplicant_income" default="0" required placeholder="1600">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="loan-amount">Loan Amount Request (in Thousands $)</label>
+                                    <input type="number" id="loan-amount" name="loan_amount" required placeholder="150">
+                                    <span class="field-hint">Example: 150 = $150,000</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loan-term">Loan Term (in Days/Months)</label>
+                                    <select id="loan-term" name="loan_term" required>
+                                        <option value="360">360 Days / 12 Months</option>
+                                        <option value="180">180 Days / 6 Months</option>
+                                        <option value="240">240 Days</option>
+                                        <option value="300">300 Days</option>
+                                        <option value="480">480 Days</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit Application</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Prediction Center Panel -->
+                <div class="panel" id="panel-prediction-center">
+                    <div class="grid-2-col">
+                        <!-- Prediction Controls -->
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-gears"></i> Request Decision Analysis</h3>
+                            </div>
+                            <form id="form-run-prediction" class="dashboard-form">
+                                <div class="form-group">
+                                    <label for="pred-loan-id">Select Pending Loan Application</label>
+                                    <select id="pred-loan-id" name="loan_id" required>
+                                        <option value="">-- Choose Loan Application --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pred-model-id">Select ML Model Engine</label>
+                                    <select id="pred-model-id" name="model_id" required>
+                                        <option value="">-- Select Model --</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-large btn-glowing"><i class="fa-solid fa-circle-play"></i> Evaluate Approval Status</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Prediction Result Card -->
+                        <div class="glass-card pred-result-card" id="prediction-result-display">
+                            <div class="result-placeholder">
+                                <i class="fa-solid fa-brain placeholder-brain"></i>
+                                <h4>Waiting for Evaluation</h4>
+                                <p>Select a pending loan application and model engine to run the XGBoost prediction pipeline.</p>
+                            </div>
+                            <div class="result-content hidden" id="prediction-result-content">
+                                <div class="result-status-header" id="result-status-box">
+                                    <i class="fa-solid" id="result-status-icon"></i>
+                                    <h2 id="result-status-title">Approved</h2>
+                                </div>
+                                <div class="probability-score-radial">
+                                    <div class="radial-ring">
+                                        <span id="result-probability-percent">87%</span>
+                                        <span class="label">Approval Prob</span>
+                                    </div>
+                                </div>
+                                <div class="result-metrics-details">
+                                    <div class="detail-row">
+                                        <span>Decision ID</span>
+                                        <strong id="result-prediction-id">#--</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Evaluation Time</span>
+                                        <strong id="result-prediction-time">--</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Predictive Model</span>
+                                        <strong id="result-model-name">--</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database View Panel -->
+                <div class="panel" id="panel-database">
+                    <!-- Tabs for different DB tables -->
+                    <div class="db-tabs">
+                        <button class="db-tab-btn active" data-table="users">Users</button>
+                        <button class="db-tab-btn" data-table="profiles">Applicant Profiles</button>
+                        <button class="db-tab-btn" data-table="loans">Loan Applications</button>
+                        <button class="db-tab-btn" data-table="predictions">Predictions DB</button>
+                    </div>
+
+                    <!-- DB Display Card -->
+                    <div class="glass-card no-padding">
+                        <div class="table-container max-height-500">
+                            <table id="system-db-table">
+                                <thead>
+                                    <!-- Dynamic headers -->
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">
+        <i id="toast-icon" class="fa-solid fa-circle-info"></i>
+        <span id="toast-message">Message details go here...</span>
+    </div>
+
+    <!-- Script Injection -->
+    <script src="app.js"></script>
+</body>
+</html>
