@@ -7,17 +7,41 @@ from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
-# Load the saved model file (rdf.pkl) with try-except fallback to the trained xgboost model
-try:
-    model = pickle.load(open('rdf.pkl', 'rb'))
-    print("Loaded model from 'rdf.pkl' successfully.")
-except FileNotFoundError:
-    try:
-        model = pickle.load(open('app/models/xgboost_loan_model.pkl', 'rb'))
-        print("rdf.pkl not found. Loaded fallback model from 'app/models/xgboost_loan_model.pkl'.")
-    except Exception as e:
-        print(f"Error loading fallback model: {e}")
-        model = None
+# Load the saved model file (loan_model.pkl or rdf.pkl)
+model = None
+model_names = ['loan_model.pkl', 'rdf.pkl']
+
+# First try loading relative to the app.py file location
+for name in model_names:
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), name)
+    if os.path.exists(path):
+        try:
+            with open(path, 'rb') as f:
+                model = pickle.load(f)
+            print(f"Loaded model from '{path}' successfully.")
+            break
+        except Exception as e:
+            print(f"Error loading model from {path}: {e}")
+
+# If not loaded, try fallback files
+if model is None:
+    fallback_paths = [
+        'rdf.pkl',
+        'loan_model.pkl',
+        '5.Project Development Phase/Flask/loan_model.pkl',
+        '5.Project Development Phase/Flask/rdf.pkl',
+        'app/models/xgboost_loan_model.pkl'
+    ]
+    for path in fallback_paths:
+        if os.path.exists(path):
+            try:
+                with open(path, 'rb') as f:
+                    model = pickle.load(f)
+                print(f"Loaded fallback model from '{path}' successfully.")
+                break
+            except Exception as e:
+                print(f"Error loading fallback model from {path}: {e}")
+
 
 @app.route('/')  # rendering the landing page
 def home():
